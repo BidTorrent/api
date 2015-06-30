@@ -41,8 +41,9 @@ foreach ($bids as $bidder => $signedBid) {
 		$log->price = $bid->price;
 	}
 }
-
 $log->price += 0.01;
+
+$impDao->save($log);
 
 print_r($log);
 

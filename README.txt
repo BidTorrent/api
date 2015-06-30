@@ -1,7 +1,7 @@
 # Track.bidtorrent.io
 
 
-## Impression
+## Impressions
 
 This endpoint tracks all impressions of BidTorrent for a given publisher
 
@@ -10,7 +10,3 @@ This endpoint tracks all impressions of BidTorrent for a given publisher
 - Each `signedBidInfo1` is in the form "auctionid-price"
 - Price is a float in EUR for one thousand impression
 - Then the tuple is signed with the private key of the bidder
-
-## Other end point
-
-TODO

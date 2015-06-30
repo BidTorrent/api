@@ -8,7 +8,7 @@ class ImpressionLogDao {
 	}
 
 	// $log is of type ImpressionLog
-	function Add($log) {
+	function Save($log) {
 
 	}
 }
