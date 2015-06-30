@@ -7,10 +7,14 @@ class BidInfoReader {
 		$this->rsa = $rsa;
 	}
 
-	function read($data, $pubKey) {
-		$result = new BidInfo();
-		$result->bidder = 1;
-		$result->price = rand(0,2);
+	function read($data, $bidder, $pubKey) {
+		list($auction, $price, $publisher, $bidderSignature) = explode("-", $data);
+
+		$result = new BidInfo();		
+		$result->auction = $auction;
+		$result->price = floatval($price);
+		$result->publisher = $publisher
+		$result->bidder = $bidder;
 		return $result;
 	}
 }
