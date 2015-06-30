@@ -1,19 +1,20 @@
 <?php
 
 class Rsa {
-	function Encrypt(clearTextValue, publicKey) {
+	function Encrypt($clearTextValue, $publicKey) 
+	{
 
 	}
 	
-	function Decrypt(clearTextValue, privateKey) {
+	function Decrypt($clearTextValue, $privateKey) {
 		
 	}
 
-	function Sign(clearTextData) {
+	function Sign($clearTextData) {
 
 	}
 	
-	function checkSignature(cipheredData, publicKey) {
+	function checkSignature($cipheredData, $publicKey) {
 		
 	}
 }
