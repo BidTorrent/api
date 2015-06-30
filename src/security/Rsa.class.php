@@ -10,12 +10,14 @@ class Rsa {
 		
 	}
 
-	function Sign($clearTextData) {
-
+	function Sign($clearTextData, $privateKey) {
+		$result = null;
+		openssl_sign($clearTextValue, $result, $privateKey);
+		return $result;
 	}
 	
-	function checkSignature($cipheredData, $publicKey) {
-		
+	function checkSignature($cipheredData, $signature, $publicKey) {
+		return openssl_verify($cipheredData, $signature, $publicKey);
 	}
 }
 
