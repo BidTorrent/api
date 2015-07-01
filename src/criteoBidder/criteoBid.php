@@ -9,8 +9,8 @@
         die();
     }
 
-    include('services\userMatch.class.php');
-    include('services\decoder.class.php');
+    include('services/userMatch.class.php');
+    include('services/decoder.class.php');
     
     $decoder = new Decoder('keys/key-1-private.pem');
     $userResolver = new UserResolver();
