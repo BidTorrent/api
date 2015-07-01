@@ -18,7 +18,7 @@ class BidInfoReader {
 
 		$bidderSignature = base64_decode($bidderSignature);
 		$dataToValidate =
-			number_format($result->price, 6, ".", "");
+			number_format($result->price, 6, ".", "") .
 			$result->auction .
 			$result->publisher;
 
