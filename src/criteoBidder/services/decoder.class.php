@@ -5,6 +5,7 @@ class Decoder
     var $privateKeyFile;
     var $currency;
     var $bidtorrentId;
+    var $bidfloor;
 
     function __construct($privateKeyFile) {
         $this->privateKeyFile = $privateKeyFile;
@@ -47,6 +48,7 @@ class Decoder
         $slot['Intention']                                  = 0; //Accept
         $slot['RenderContainer']                            = 1; //Javascript
         $slot['Sizes']                                      = array(array('Item1' => $content['imp'][0]['banner']['h'], 'Item2' => $content['imp'][0]['banner']['w']));
+        $slot['MinCpm']                                     = $content['imp'][0]['bidfloor'];
         $criteoRequest['Slots']                             = array($slot);
         $criteoRequest['Currency']                          = $content['cur'];
         $criteoRequest['ext']['btid']                       = $content['ext']['btid'];
@@ -55,6 +57,7 @@ class Decoder
 
         $this->currency = $content['cur'];
         $this->bidtorrentId = $content['ext']['btid'];
+        $this->bidfloor = $content['imp'][0]['bidfloor'];
         return true;
     }
 
@@ -79,7 +82,7 @@ class Decoder
             'id' => $criteoResponse['seatbid'][0]['bid'][0]['id'],
             'impid' => $criteoResponse['seatbid'][0]['bid'][0]['impid'],
             'price' => $criteoResponse['seatbid'][0]['bid'][0]['price'],
-            'signature' => $this->Sign($criteoResponse['seatbid'][0]['bid'][0]['price'], $criteoResponse['id'], $this->bidtorrentId),
+            'signature' => $this->Sign($criteoResponse['seatbid'][0]['bid'][0]['price'], $criteoResponse['id'], $this->bidtorrentId, $this->bidfloor),
             'nurl' => '',
             'adomain' => $criteoResponse['seatbid'][0]['bid'][0]['adomain'][0],
             'creative' => $criteoResponse['seatbid'][0]['bid'][0]['creative']['adm']
@@ -118,11 +121,12 @@ class Decoder
         $current[$lastKey] = $value;
     }
 
-    private function Sign($price, $requestId, $publisherId) {
+    private function Sign($price, $requestId, $publisherId, $bidfloor) {
         $key = file_get_contents($this->privateKeyFile);
         $data = number_format($price, 6).
                 $requestId.
-                $publisherId;
+                $publisherId.
+                number_format($bidfloor, 6);
         openssl_sign($data, $result, $key);
         return base64_encode($result);
     }
