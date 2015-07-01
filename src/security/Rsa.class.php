@@ -1,23 +1,23 @@
 <?php
 
 class Rsa {
-	function Encrypt($clearTextValue, $publicKey) 
+	function encrypt($clearTextValue, $publicKey) 
 	{
 
 	}
 	
-	function Decrypt($clearTextValue, $privateKey) {
+	function decrypt($clearTextValue, $privateKey) {
 		
 	}
 
-	function Sign($clearTextData, $privateKey) {
+	function sign($clearTextData, $privateKey) {
 		$result = null;
 		openssl_sign($clearTextValue, $result, $privateKey);
 		return $result;
 	}
 	
-	function checkSignature($cipheredData, $signature, $publicKey) {
-		return openssl_verify($cipheredData, $signature, $publicKey);
+	function checkSignature($data, $signature, $publicKey) {
+		return openssl_verify($data, $signature, $publicKey);
 	}
 }
 

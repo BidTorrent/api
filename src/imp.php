@@ -23,7 +23,7 @@ $rsaPubKeys = $bidderDao->getKeys(array_keys($bids));
 $log = new ImpressionLog();
 
 foreach ($bids as $bidder => $signedBid) {
-	$bid = $bidReader->read($signedBid, $rsaPubKeys[$bidder]);
+	$bid = $bidReader->read($signedBid, $bidder, $rsaPubKeys[$bidder]);
 	
 	// ensures that all the bids are about the same auction/publisher/bidder tuple
 	if ($log->date != null) {

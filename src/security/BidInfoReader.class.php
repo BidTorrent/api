@@ -13,14 +13,24 @@ class BidInfoReader {
 		$result = new BidInfo();		
 		$result->auction = $auction;
 		$result->price = floatval($price);
-		$result->publisher = $publisher
+		$result->publisher = $publisher;
 		$result->bidder = $bidder;
+
+		$bidderSignature = base64_decode($bidderSignature);
+		$dataToValidate =
+			$price .
+			$result->auction .
+			$result->publisher;
+
+		if (!$this->rsa->checkSignature($dataToValidate, $bidderSignature, $pubKey)) {
+			die("Bad signature $bidderSignature");
+		}
+
 		return $result;
 	}
 }
 
 class BidInfo {
-	public $date;
 	public $auction;
 	public $publisher;
 	public $bidder;
