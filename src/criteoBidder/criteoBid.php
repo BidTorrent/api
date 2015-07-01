@@ -46,7 +46,7 @@
     error_reporting(E_ERROR | E_WARNING | E_PARSE);
     $criteoRequest                                      = array();
     $criteoRequest['Analysis']                          = 1;
-    $criteoRequest['PublisherID']                       = $content['site']['publisher']['id'];
+    $criteoRequest['PublisherID']                       = isset($content['site']) ? $content['site']['publisher']['id'] : $content['app']['publisher']['id'];
     $criteoRequest['Timeout']                           = 120;
     
     $criteoRequest['AppInfo']                           = array();
@@ -95,7 +95,11 @@
     if ($criteoResponse == null) {
         ReturnNoBid("No response from CRITEO");
     }
-    
+
+    if (!isset($criteoResponse['seatbid']) || count($criteoResponse['seatbid']) == 0) {
+        ReturnNoBid("Criteo answered with no bid");
+    }
+
     error_reporting(E_ALL);
     
     //echo json_encode($criteoResponse, JSON_PRETTY_PRINT);
