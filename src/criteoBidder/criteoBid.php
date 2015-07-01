@@ -1,6 +1,8 @@
 <?php
     $endPoint = 'http://rtb.fr.eu.criteo.com/delivery/auction/request?profile=55';
     
+    header("Access-Control-Allow-Origin: *");
+
     function ReturnNoBid($error) {
         header("X-CriteoBidder-Error: $error");
         header("HTTP/1.0 204 No Content");
