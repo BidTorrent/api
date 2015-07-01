@@ -111,7 +111,6 @@
         'id' => $criteoResponse['seatbid'][0]['bid'][0]['id'],
         'impid' => $criteoResponse['seatbid'][0]['bid'][0]['impid'],
         'price' => $criteoResponse['seatbid'][0]['bid'][0]['price'],
-        //FixMe PublisherID
         'signature' => Sign($criteoResponse['seatbid'][0]['bid'][0]['price'], $criteoResponse['id'], $bidtorrentPubId),
         'nurl' => '',
         'adomain' => $criteoResponse['seatbid'][0]['bid'][0]['adomain'][0],
