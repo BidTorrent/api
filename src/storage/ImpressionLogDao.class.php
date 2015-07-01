@@ -7,9 +7,31 @@ class ImpressionLogDao {
 		$this->db = $db;
 	}
 
-	// $log is of type ImpressionLog
-	function Save($log) {
-
+	function save($log) {
+		$this->db->execute('
+			INSERT INTO `log-impressions` (
+				date,
+				publisherId,
+				bidderId,
+				auctionId,
+				price
+			)
+			VALUES 
+			(
+				:date,
+				:publisher,
+				:bidder,
+				:auction,
+				:price
+			)',
+			array(				
+				'date' => $log->date,
+				'publisher' => $log->publisher,
+				'bidder' => $log->bidder,
+				'auction' => $log->auction,
+				'price' => $log->price
+			)
+		);
 	}
 }
 

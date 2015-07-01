@@ -12,7 +12,7 @@ if (!isset($_GET["d"])) die("plop");
 $bids = $_GET["d"];
 
 // dependancies
-$db = new MySql("localhost", "root", "");
+$db = new MySql("localhost", "root", "", "bidtorrent");
 $impDao = new ImpressionLogDao($db);
 $bidderDao = new BidderDao($db);
 $rsa = new Rsa();
