@@ -26,16 +26,16 @@ class Decoder
 
         $criteoRequest['AppInfo']                           = array();
         $criteoRequest['AppInfo']['AppId']                  = $this->Get($content, array('app', 'publisher', 'id'));
-        $criteoRequest['AppInfo']['AppName']                = $content['app']['publisher']['name'];
+        $criteoRequest['AppInfo']['AppName']                = $this->Get($content, array('app', 'publisher', 'name'));
         $criteoRequest['RequestID']                         = $content['id'];
         $criteoRequest['Device']                            = array();
-        $criteoRequest['Device']['IdCategory']              = strtolower($content['device']['os']) == 'ios' ? 'IDFA' : 
-                                                                strtolower($content['device']['os']) == 'android' ? 'ANDROID_ID' :
+        $criteoRequest['Device']['IdCategory']              = strtolower($this->Get($content, array('device', 'os'))) == 'ios' ? 'IDFA' : 
+                                                                strtolower($this->Get($content, array('device', 'os'))) == 'android' ? 'ANDROID_ID' :
                                                                 null;
         $criteoRequest['Device']['EnvironmentType']         = isset($content['site']) ? 0 : 1; // 0 => Web, 1 => In_app
         $criteoRequest['Device']['Id']                      = $this->Get($content, array('device', 'id'));
-        $criteoRequest['Device']['OperatingSystemType']     = strtolower($content['device']['os']) == 'ios' ? 1 :
-                                                                strtolower($content['device']['os']) == 'android' ? 2 :
+        $criteoRequest['Device']['OperatingSystemType']     = strtolower($this->Get($content, array('device', 'os'))) == 'ios' ? 1 :
+                                                                strtolower($this->Get($content, array('device', 'os'))) == 'android' ? 2 :
                                                                 0;
         $criteoRequest['User']                              = array();
         $criteoRequest['User']['CriteoUser']                = array();
