@@ -13,10 +13,7 @@ class BidInfoReader {
 		list($price, $bidderSignature) = explode("-", $data);
 		$floor = floatval($floor);
 
-		$result = new BidInfo();
-		$result->price = floatval($price);
-		$result->bidder = $bidder;
-
+		$result = new BidInfo($bidder, floatval($price));
 		$bidderSignature = base64_decode($bidderSignature);
 		$dataToValidate =
 			number_format($result->price, 6, ".", "") .
@@ -35,6 +32,11 @@ class BidInfoReader {
 class BidInfo {
 	public $bidder;
 	public $price;
+
+	function __construct($bidder, $price) {
+		$this->bidder = $bidder;
+		$this->price = $price;
+	}
 }
 
 ?>

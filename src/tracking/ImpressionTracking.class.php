@@ -27,26 +27,32 @@ class ImpressionTracking {
 		foreach ($rawBids as $bidder => $signedBid) {
 			$bids[$bidder] = $this->bidReader->read($signedBid, $auction, $bidder, $publisher, $floor, $rsaPubKeys[$bidder]);
 		}
+		$bids['publisher'] = new BidInfo('publisher', $floor);
 
-		$log = new ImpressionLog();
+		$first = $bids['publisher'];
+		$second = $bids['publisher'];
 		foreach ($bids as $bidder => $bid) {
-			
-			// ensures that all the bids are about the same auction/publisher/bidder tuple
-			if ($log->date != null) {
-				if ($bid->publisher != $log->publisher) die("Wrong publisher");
-				if ($bid->auction != $log->auction) die("Wrong auction");
-			}
-
-			// saves the highest price
-			if ($log->date == null || $bid->price > $log->price) {
-				$log->date = time();
-				$log->auction = $auction;
-				$log->publisher = $publisher;
-				$log->bidder = $bidder;
-				$log->price = $bid->price;
+			if($bid->price > $second->price) {
+				if ($bid->price > $first->price) {
+					$second = $first;
+					$first = $bid;
+				} else {
+					$second = $bid;
+				}
 			}
 		}
-		$this->impDao->save($log);
+
+		// saves the highest price
+		if ($first->bidder != 'publisher') {
+			$log = new ImpressionLog();
+			$log->date = time();
+			$log->auction = $auction;
+			$log->publisher = $publisher;
+			$log->bidder = $first->bidder;
+			$log->price = floor(($second->price + 0.01) * 1000000) / 1000000;
+			$this->impDao->save($log);
+		}
+
 		print_r($log);
 	}
 }
