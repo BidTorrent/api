@@ -52,8 +52,6 @@ class ImpressionTracking {
 			$log->price = floor(($second->price + 0.01) * 1000000) / 1000000;
 			$this->impDao->save($log);
 		}
-
-		print_r($log);
 	}
 }
 

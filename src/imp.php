@@ -18,7 +18,14 @@ $bidReader = new BidInfoReader($rsa);
 // go
 $tracker = new ImpressionTracking($impDao, $bidderDao, $bidReader);
 $tracker->track($_GET);
-
 $db->close();
+
+//
+header('Content-Type: image/png');
+header('Cache-Control: no-cache, no-store, must-revalidate');
+header('Pragma: no-cache');
+header('Expires: 0');
+
+echo base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=');
 
 ?>
