@@ -29,6 +29,7 @@ class ImpressionTracking {
 		}
 		$bids['publisher'] = new BidInfo('publisher', $floor);
 
+		// get the winner adn the second one
 		$first = $bids['publisher'];
 		$second = $bids['publisher'];
 		foreach ($bids as $bidder => $bid) {
@@ -42,7 +43,7 @@ class ImpressionTracking {
 			}
 		}
 
-		// saves the highest price
+		// log the impression with second's price + 0.01
 		if ($first->bidder != 'publisher') {
 			$log = new ImpressionLog();
 			$log->date = time();

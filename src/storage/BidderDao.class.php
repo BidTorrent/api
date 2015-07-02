@@ -9,10 +9,21 @@ class BidderDao {
 
 	function getKeys($ids) {
 		$result = array();
-		$ids = array(1,2,3);
-		foreach ($ids as $id) {
-			$result[$id] = file_get_contents("security/testKeys/key-${id}-public.pem");
+		$rows = $this->db->execute('
+			SELECT
+				id,
+				rsaPubKey
+			FROM
+				bidders
+			WHERE
+				id IN (:ids)',
+			array('ids' => $ids)
+		);
+
+		foreach($rows as $row) {
+			$result[$row['id']] = $row['rsaPubKey'];
 		}
+
 		return $result;
 	}	
 }
