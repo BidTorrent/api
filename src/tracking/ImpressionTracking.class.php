@@ -11,27 +11,26 @@ class ImpressionTracking {
 		$this->bidReader = $bidReader;
 	}
 
-	function track($rawParameters) {
-		if (!isset($rawParameters["d"])) die("data param is missing");
-		$rawBids = $rawParameters["d"];
-		if (!isset($rawParameters["f"])) die("floor param is missing");
-		$floor = $rawParameters["f"]);
-		if (!isset($rawParameters["a"])) die("auction param is missing");
-		$auction = $rawParameters["a"]);
-		if (!isset($rawParameters["p"])) die("publisher param is missing");
-		$publisher = $rawParameters["p"]);
+	function track($params) {
+		if (!isset($params["d"])) die("data param is missing");
+		$rawBids = $params["d"];
+		if (!isset($params["f"])) die("floor param is missing");
+		$floor = $params["f"];
+		if (!isset($params["a"])) die("auction param is missing");
+		$auction = $params["a"];
+		if (!isset($params["p"])) die("publisher param is missing");
+		$publisher = $params["p"];
 
 		// parse the bids and check the signature
-		$rsaPubKeys = $this->bidderDao->getKeys(array_keys($bids));
+		$rsaPubKeys = $this->bidderDao->getKeys(array_keys($rawBids));
 		$bids = array();
 		foreach ($rawBids as $bidder => $signedBid) {
-			$bids[] = $this->bidReader->read($signedBid, $auction, $bidder, $publisher, $floor, $rsaPubKeys[$bidder]);
+			$bids[$bidder] = $this->bidReader->read($signedBid, $auction, $bidder, $publisher, $floor, $rsaPubKeys[$bidder]);
 		}
 
 		$log = new ImpressionLog();
-		foreach ($bids as $bidder => $signedBid) {
-			$bid = $this->bidReader->read($signedBid, $bidder, $rsaPubKeys[$bidder]);
-
+		foreach ($bids as $bidder => $bid) {
+			
 			// ensures that all the bids are about the same auction/publisher/bidder tuple
 			if ($log->date != null) {
 				if ($bid->publisher != $log->publisher) die("Wrong publisher");
@@ -41,9 +40,9 @@ class ImpressionTracking {
 			// saves the highest price
 			if ($log->date == null || $bid->price > $log->price) {
 				$log->date = time();
-				$log->auction = $bid->auction;
-				$log->publisher = $bid->publisher;
-				$log->bidder = $bid->bidder;
+				$log->auction = $auction;
+				$log->publisher = $publisher;
+				$log->bidder = $bidder;
 				$log->price = $bid->price;
 			}
 		}

@@ -9,7 +9,7 @@ class BidInfoReader {
 		$this->rsa = $rsa;
 	}
 
-	function read($data, $auction, $bidder, $publisher, $floor, $pubKeys) {
+	function read($data, $auction, $bidder, $publisher, $floor, $pubKey) {
 		list($price, $bidderSignature) = explode("-", $data);
 		$floor = floatval($floor);
 

@@ -26,7 +26,7 @@ class MySql {
 	}
 	
 	function close() {
-		$this->connection->close();
+		$this->connection = null;
 	}
 }
 

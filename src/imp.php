@@ -17,7 +17,7 @@ $bidReader = new BidInfoReader($rsa);
 
 // go
 $tracker = new ImpressionTracking($impDao, $bidderDao, $bidReader);
-$tracker.track($_GET);
+$tracker->track($_GET);
 
 $db->close();
 
