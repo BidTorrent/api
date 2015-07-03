@@ -7,9 +7,11 @@ include_once("storage/ImpressionLogDao.class.php");
 include_once("storage/BidderDao.class.php");
 include_once("tracking/ImpressionTracking.class.php");
 
+if (!file_exists('config/config.php')) die('config/config.php is not found, copy the appropriate "config/config.XXX.php" files to "config/config.php"');
+include_once("config/config.php");
 
 // Dependancies
-$db = new MySql("localhost", "root", "", "bidtorrent");
+$db = $config["db"];
 $impDao = new ImpressionLogDao($db);
 $bidderDao = new BidderDao($db);
 $rsa = new Rsa();

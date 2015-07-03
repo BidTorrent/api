@@ -9,6 +9,7 @@ class BidderDao {
 
 	function getKeys($ids) {
 		$result = array();
+
 		$rows = $this->db->execute('
 			SELECT
 				id,

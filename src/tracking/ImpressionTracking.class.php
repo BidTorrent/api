@@ -29,10 +29,10 @@ class ImpressionTracking {
 		}
 		$bids['publisher'] = new BidInfo('publisher', $floor);
 
-		// get the winner adn the second one
+		// get the winner and the second one
 		$first = $bids['publisher'];
 		$second = $bids['publisher'];
-		foreach ($bids as $bidder => $bid) {
+		foreach ($bids as $bid) {
 			if($bid->price > $second->price) {
 				if ($bid->price > $first->price) {
 					$second = $first;
