@@ -28,7 +28,7 @@
     
     $response = array(
         "id" => $criteoRequest['id'],
-        "cur" => "EUR",
+        "cur" => "USD",
         "seatbid" => array(
             array(
                 "bid" => array(
@@ -36,7 +36,7 @@
                         "id" => "559401bb8f9c6c9bb27e9d9d863e6df0",
                         "impid" => "1",
                         "price" => 0.032,
-                        "signature" => Sign(0.032, $criteoRequest['id'], $criteoRequest['ext']['btid'], $criteoRequest['imp'][0]['bidfloor']),
+                        "signature" => Sign(0.032, $criteoRequest['id'], '', $criteoRequest['imp'][0]['bidfloor']),
                         "nurl" => "",
                         "adomain" => "miniinthebox.com",
                         "creative" => $creative
