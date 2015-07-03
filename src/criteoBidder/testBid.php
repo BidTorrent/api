@@ -33,8 +33,7 @@
             array(
                 "bid" => array(
                     array(
-                        "id" => "559401bb8f9c6c9bb27e9d9d863e6df0",
-                        "impid" => "1",
+                        "id" => "1",
                         "price" => 0.032,
                         "signature" => Sign(0.032, $criteoRequest['id'], '', $criteoRequest['imp'][0]['bidfloor']),
                         "nurl" => "",
