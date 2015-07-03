@@ -1,14 +1,15 @@
 <?php
 
-class Decoder
+//Deprecated Should Use the CriteoBidTorrentDecoder
+class CriteoTestDecoder
 {
-    var $privateKeyFile;
+    var $helper;
     var $currency;
     var $bidtorrentId;
     var $bidfloor;
 
-    function __construct($privateKeyFile) {
-        $this->privateKeyFile = $privateKeyFile;
+    function __construct($helper) {
+        $this->helper = $helper;
     }
 
     function tryDecode($stream, $userId, &$request, &$errorMessage) {
@@ -26,23 +27,23 @@ class Decoder
         $criteoRequest['Timeout']                           = 120;
 
         $criteoRequest['AppInfo']                           = array();
-        $criteoRequest['AppInfo']['AppId']                  = $this->Get($content, array('app', 'publisher', 'id'));
-        $criteoRequest['AppInfo']['AppName']                = $this->Get($content, array('app', 'publisher', 'name'));
+        $criteoRequest['AppInfo']['AppId']                  = $this->helper->Get($content, array('app', 'publisher', 'id'));
+        $criteoRequest['AppInfo']['AppName']                = $this->helper->Get($content, array('app', 'publisher', 'name'));
         $criteoRequest['RequestID']                         = $content['id'];
         $criteoRequest['Device']                            = array();
-        $criteoRequest['Device']['IdCategory']              = strtolower($this->Get($content, array('device', 'os'))) == 'ios' ? 'IDFA' : 
-                                                                strtolower($this->Get($content, array('device', 'os'))) == 'android' ? 'ANDROID_ID' :
+        $criteoRequest['Device']['IdCategory']              = strtolower($this->helper->Get($content, array('device', 'os'))) == 'ios' ? 'IDFA' : 
+                                                                strtolower($this->helper->Get($content, array('device', 'os'))) == 'android' ? 'ANDROID_ID' :
                                                                 null;
         $criteoRequest['Device']['EnvironmentType']         = isset($content['site']) ? 0 : 1; // 0 => Web, 1 => In_app
-        $criteoRequest['Device']['Id']                      = $this->Get($content, array('device', 'id'));
-        $criteoRequest['Device']['OperatingSystemType']     = strtolower($this->Get($content, array('device', 'os'))) == 'ios' ? 1 :
-                                                                strtolower($this->Get($content, array('device', 'os'))) == 'android' ? 2 :
+        $criteoRequest['Device']['Id']                      = $this->helper->Get($content, array('device', 'id'));
+        $criteoRequest['Device']['OperatingSystemType']     = strtolower($this->helper->Get($content, array('device', 'os'))) == 'ios' ? 1 :
+                                                                strtolower($this->helper->Get($content, array('device', 'os'))) == 'android' ? 2 :
                                                                 0;
         $criteoRequest['User']                              = array();
         $criteoRequest['User']['CriteoUser']                = array();
         $criteoRequest['User']['CriteoUser']['Id']          = $userId;
         $criteoRequest['User']['CriteoUser']['Version']     = 1;
-        $criteoRequest['User']['IpAddress']                 = $this->Get($content, array('device', 'ip'));
+        $criteoRequest['User']['IpAddress']                 = $this->helper->Get($content, array('device', 'ip'));
         $slot                                               = array();
         $slot['SlotId']                                     = 1;
         $slot['Intention']                                  = 0; //Accept
@@ -51,7 +52,7 @@ class Decoder
         $slot['MinCpm']                                     = $content['imp'][0]['bidfloor'];
         $criteoRequest['Slots']                             = array($slot);
         $criteoRequest['Currency']                          = $content['cur'];
-        $criteoRequest['ext']['btid']                       = $this->Get($content, array('ext', 'btid'));
+        $criteoRequest['ext']['btid']                       = $this->helper->Get($content, array('ext', 'btid'));
 
         $request = $criteoRequest;
 
@@ -82,7 +83,7 @@ class Decoder
             'id' => $criteoResponse['seatbid'][0]['bid'][0]['id'],
             'impid' => $criteoResponse['seatbid'][0]['bid'][0]['impid'],
             'price' => $criteoResponse['seatbid'][0]['bid'][0]['price'],
-            'signature' => $this->Sign($criteoResponse['seatbid'][0]['bid'][0]['price'], $criteoResponse['id'], $this->bidtorrentId, $this->bidfloor),
+            'signature' => $this->helper->Sign($criteoResponse['seatbid'][0]['bid'][0]['price'], $criteoResponse['id'], $this->bidtorrentId, $this->bidfloor),
             'nurl' => '',
             'adomain' => $criteoResponse['seatbid'][0]['bid'][0]['adomain'][0],
             'creative' => $criteoResponse['seatbid'][0]['bid'][0]['creative']['adm']
@@ -93,43 +94,6 @@ class Decoder
         $response['ext'] = array('btid' => $this->bidtorrentId);
         
         return true;
-    }
-
-    function Get($obj, $keys) {
-        if (!is_array($keys))
-            return $this->Get($obj, array($keys));
-
-        if (count($keys) == 0)
-            return $obj;
-
-        $currentKey = array_shift($keys);
-        if (!isset($obj[$currentKey]))
-            return null;
-
-        return $this->Get($obj[$currentKey], $keys);
-    }
-
-    function Set(&$obj, $keys, $value) {
-        if ($value == null)
-            return;
-        $current &= $obj;
-        $lastKey = array_pop($keys);
-        foreach($keys as $key) {
-            if (!isset($current[$key]))
-                $current[$key] = array();
-            $current &= $current[$key];
-        }
-        $current[$lastKey] = $value;
-    }
-
-    private function Sign($price, $requestId, $publisherId, $bidfloor) {
-        $key = file_get_contents($this->privateKeyFile);
-        $data = number_format($price, 6).
-                $requestId.
-                $publisherId.
-                number_format($bidfloor, 6);
-        openssl_sign($data, $result, $key);
-        return base64_encode($result);
     }
 }
 ?>

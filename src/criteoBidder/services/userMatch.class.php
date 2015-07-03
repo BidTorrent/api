@@ -1,11 +1,14 @@
 <?php
-
 class UserResolver
 {
     var $partner = '42';
 
     function getUserId($cookies) {
 
+        if (isset($cookie['uid'])) {
+            return $cookie['uid'];
+        }
+        
         if (!isset($cookies['Ids']))
         {
             return '';

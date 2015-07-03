@@ -8,9 +8,12 @@
     }
 
     include('services/userMatch.class.php');
-    include('services/decoder.class.php');
+    include('services/DecoderHelper.class.php');
+    include('services/criteoTestDecoder.class.php');
     
-    $decoder = new Decoder('keys/key-1-private.pem');
+    $helper = new DecoderHelper('keys/key-1-private.pem');
+    //$decoder = new CriteoBidtorrentDecoder($helper);
+    $decoder = new CriteoTestDecoder($helper);
     $userResolver = new UserResolver();
     
     $userId = $userResolver->getUserId($_COOKIE);
