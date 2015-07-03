@@ -4,21 +4,23 @@ class ImpressionTracking {
 	private $impDao;
 	private $bidderDao;
 	private $bidReader;
+	private $log;
 
-	function __construct($impDao, $bidderDao, $bidReader) {
+	function __construct($impDao, $bidderDao, $bidReader, $log) {
 		$this->impDao = $impDao;
 		$this->bidderDao = $bidderDao;
 		$this->bidReader = $bidReader;
+		$this->log = $log;
 	}
 
 	function track($params) {
-		if (!isset($params["d"])) die("data param is missing");
+		if (!isset($params["d"])) $this->log->fatal("data param is missing");
 		$rawBids = $params["d"];
-		if (!isset($params["f"])) die("floor param is missing");
+		if (!isset($params["f"])) $this->log->fatal("floor param is missing");
 		$floor = $params["f"];
-		if (!isset($params["a"])) die("auction param is missing");
+		if (!isset($params["a"])) $this->log->fatal("auction param is missing");
 		$auction = $params["a"];
-		if (!isset($params["p"])) die("publisher param is missing");
+		if (!isset($params["p"])) $this->log->fatal("publisher param is missing");
 		$publisher = $params["p"];
 
 		// parse the bids and check the signature

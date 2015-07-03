@@ -4,9 +4,11 @@
 // - Verify the bidder signature
 class BidInfoReader {
 	private $rsa;
+	private $log;
 
-	function __construct($rsa) {
+	function __construct($rsa, $log) {
 		$this->rsa = $rsa;
+		$this->log = $log;
 	}
 
 	function read($data, $auction, $bidder, $publisher, $floor, $pubKey) {
@@ -22,7 +24,7 @@ class BidInfoReader {
 			number_format($floor, 6, ".", "");
 
 		if (!$this->rsa->checkSignature($dataToValidate, $bidderSignature, $pubKey)) {
-			die("Bad signature $bidderSignature");
+			$this->log->fatal("Bad signature $bidderSignature");
 		}
 
 		return $result;

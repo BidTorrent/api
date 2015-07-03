@@ -1,7 +1,6 @@
 <?php
 
-$config = array(
-	"db" => new MySql("localhost", "bidtorrent", "hack@thon", "bidtorrent")
-);
+$config['log'] = new ProdLogger();
+$config['db'] = new MySql("localhost", "bidtorrent", "hack@thon", "bidtorrent", $config['log']);
 
 ?>

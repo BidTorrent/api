@@ -2,13 +2,15 @@
 
 class MySql {
 	private $connection;
+	private $log;
 
-	function __construct($host, $user, $pass, $db) {
+	function __construct($host, $user, $pass, $db, $log) {
 		$this->connection = new PDO (
 			"mysql:dbname=$db;host=$host",
 			$user,
 			$pass
 		);
+		$this->log = $log;
 	}
 
 	function execute($sql, $params = null) {
@@ -17,8 +19,7 @@ class MySql {
 			$result = array();
 			$queryResult = $this->connection->query($sql);
 			if ($queryResult === false) {
-				var_dump($this->connection->errorInfo());
-				die();
+				$this->log->fatal($this->connection->errorInfo());
 			}
 			foreach($queryResult as $row) {
 				$result[] = $row;
@@ -28,8 +29,7 @@ class MySql {
 			$statement = $this->connection->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));			
 			$queryResult = $statement->execute($params);
 			if ($queryResult === false) {
-				var_dump($this->connection->errorInfo());
-				die();
+				$this->log->fatal($this->connection->errorInfo());
 			}
 
 			return $statement->fetchAll();
