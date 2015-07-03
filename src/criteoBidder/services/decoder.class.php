@@ -42,12 +42,12 @@ class Decoder
         $criteoRequest['User']['CriteoUser']                = array();
         $criteoRequest['User']['CriteoUser']['Id']          = $userId;
         $criteoRequest['User']['CriteoUser']['Version']     = 1;
-        $criteoRequest['User']['IpAddress']                 = $content['device']['ip'];
+        $criteoRequest['User']['IpAddress']                 = $this->Get($content, array('device', 'ip'));
         $slot                                               = array();
         $slot['SlotId']                                     = 1;
         $slot['Intention']                                  = 0; //Accept
-        $slot['RenderContainer']                            = 1; //Javascript
-        $slot['Sizes']                                      = array(array('Item1' => $content['imp'][0]['banner']['h'], 'Item2' => $content['imp'][0]['banner']['w']));
+        $slot['RenderContainer']                            = isset($content['site']) ? 0 : 1; // 0 => IFrame, 1 => Javascript
+        $slot['Sizes']                                      = array(array('Item1' => $content['imp'][0]['banner']['w'], 'Item2' => $content['imp'][0]['banner']['h']));
         $slot['MinCpm']                                     = $content['imp'][0]['bidfloor'];
         $criteoRequest['Slots']                             = array($slot);
         $criteoRequest['Currency']                          = $content['cur'];
@@ -90,7 +90,8 @@ class Decoder
         $seatbid = array();
         $seatbid['bid'] = array($seatbidObject);
         $response['seatbid'] = array($seatbid);
-
+        $response['ext'] = array('btid' => $this->bidtorrentId);
+        
         return true;
     }
 

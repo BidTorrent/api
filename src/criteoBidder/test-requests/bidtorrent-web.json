@@ -1,9 +1,10 @@
 {
   "user": {
     "id": "MyID",
-    "buyerid": "MyID"
+    "buyeruid": "7387e308-fd65-40fd-ad90-564f6104d603"
   },
   "site": { 
+    "id": "123",
     "cat": [
       "IAB1",
       "IAB9",
@@ -47,9 +48,9 @@
         "btype": [
           4
         ],
-        "h": 300,
+        "h": 250,
         "pos": 1,
-        "w": 250
+        "w": 300
         },
       "bidfloor": 0.01,
       "id": "1",
