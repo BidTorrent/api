@@ -51,7 +51,7 @@ class Decoder
         $slot['MinCpm']                                     = $content['imp'][0]['bidfloor'];
         $criteoRequest['Slots']                             = array($slot);
         $criteoRequest['Currency']                          = $content['cur'];
-        $criteoRequest['ext']['btid']                       = $content['ext']['btid'];
+        $criteoRequest['ext']['btid']                       = $this->Get($content, array('ext', 'btid'));
 
         $request = $criteoRequest;
 
