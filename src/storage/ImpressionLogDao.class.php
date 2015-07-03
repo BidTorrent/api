@@ -9,7 +9,7 @@ class ImpressionLogDao {
 
 	function save($log) {
 		$this->db->execute('
-			INSERT INTO `log-impressions` (
+			INSERT INTO `log_impressions` (
 				date,
 				publisherId,
 				bidderId,
