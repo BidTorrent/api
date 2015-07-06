@@ -4,10 +4,11 @@
     "buyeruid": "MyID"
   },
   "app": { 
+    "id": "123"
     "domain": "www.bbc.com",
     "mobile": 1,
     "publisher": {
-      "id": "123",
+      "id": "42",
       "name": "Yahoo"
     }
   },
@@ -40,8 +41,5 @@
       "instl": 1,
       "secure": false
     } ],
-    "tmax": 100,
-    "ext": {
-        "btid": 42
-    }
+    "tmax": 100
 }

@@ -4,6 +4,7 @@ class CriteoBidTorrentDecoder
 {
     var $bidfloor;
     var $helper;
+    var $btid;
     
     function __construct($helper) {
         $this->helper = $helper;
@@ -18,9 +19,11 @@ class CriteoBidTorrentDecoder
         
         $this->helper->Set($request, array('user', 'buyeruid'), $userId);
         $this->bidfloor = $this->helper->Get($request, array('imp', 0, 'bidfloor'));
+        $this->btId = $this->helper->Get($response, array('site', 'publisher', 'id'));
+        if ($this->btid == null)
+            $this->btId = $this->helper->Get($response, array('app', 'publisher', 'id'));
         
         $decodedRequest = $request;
-        
         return true;
     }
 
@@ -37,17 +40,15 @@ class CriteoBidTorrentDecoder
 
         $price = $this->helper->Get($response, array('seatbid', 0, 'bid', 0, 'price'));
         $reqId = $this->helper->Get($response, array('id'));
-        $btId = $this->helper->Get($response, array('ext', 'btid'));
         
         $this->helper->Set($response, array('seatbid', 0, 'bid', 0, 'signature'), $this->helper->Sign(
             $price, 
             $reqId, 
-            $btId, 
+            $this->btId,
             $this->bidfloor
             ));
         
         $encodedResponse = $response;
-        
         return true;
     }
 }

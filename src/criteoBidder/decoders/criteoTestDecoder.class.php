@@ -23,7 +23,7 @@ class CriteoTestDecoder
 
         $criteoRequest                                      = array();
         $criteoRequest['Analysis']                          = 1;
-        $criteoRequest['PublisherID']                       = isset($content['site']) ? $content['site']['publisher']['id'] : $content['app']['publisher']['id'];
+        $criteoRequest['PublisherID']                       = isset($content['site']) ? $content['site']['id'] : $content['app']['id'];
         $criteoRequest['Timeout']                           = 120;
 
         $criteoRequest['AppInfo']                           = array();
@@ -56,8 +56,8 @@ class CriteoTestDecoder
 
         $request = array('bidrequest' => $criteoRequest);
     
+        $this->bidtorrentId = isset($content['site']['id']) ? $content['site']['publisher']['id'] : $content['app']['publisher']['id'] ;
         $this->currency = $content['cur'];
-        $this->bidtorrentId = $content['ext']['btid'];
         $this->bidfloor = $content['imp'][0]['bidfloor'];
         return true;
     }
@@ -91,7 +91,6 @@ class CriteoTestDecoder
         $seatbid = array();
         $seatbid['bid'] = array($seatbidObject);
         $response['seatbid'] = array($seatbid);
-        $response['ext'] = array('btid' => $this->bidtorrentId);
         
         return true;
     }
