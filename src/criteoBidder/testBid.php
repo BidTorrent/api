@@ -3,11 +3,11 @@
     error_reporting(E_ALL);
     ini_set('display_errors', 'on');
     
-    include('services/decoderHelper.class.php');
-    include('services/criteoBidTorrentDecoder.class.php');
-    include('services/userResolver.class.php');
-    include('services/testBidder.class.php');
-    include('services/wrapperBidder.class.php');
+    include('decoders/decoderHelper.class.php');
+    include('decoders/criteoBidTorrentDecoder.class.php');
+    include('userResolvers/userResolver.class.php');
+    include('bidders/testBidder.class.php');
+    include('bidders/wrapperBidder.class.php');
     
     $helper = new DecoderHelper('keys/key-1-private.pem');
     $decoder = new CriteoBidTorrentDecoder($helper);
