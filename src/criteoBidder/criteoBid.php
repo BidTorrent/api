@@ -1,50 +1,26 @@
 <?php
-    $endPoint = 'http://rtb.fr.eu.criteo.com/delivery/auction/request?profile=55';
     
-    function ReturnNoBid($error) {
-        header("X-CriteoBidder-Error: $error");
-        header("HTTP/1.0 204 No Content");
-        die();
-    }
-
-    include('services/userMatch.class.php');
-    include('services/DecoderHelper.class.php');
+    error_reporting(E_ALL);
+    ini_set('display_errors', 'on');
+    
+    include('services/decoderHelper.class.php');
     include('services/criteoTestDecoder.class.php');
+    include('services/userResolver.class.php');
+    include('services/criteoBidder.class.php');
+    include('services/wrapperBidder.class.php');
     
     $helper = new DecoderHelper('keys/key-1-private.pem');
-    //$decoder = new CriteoBidtorrentDecoder($helper);
     $decoder = new CriteoTestDecoder($helper);
     $userResolver = new UserResolver();
+    $innerBidder = new CriteoBidder('http://rtb.fr.eu.criteo.com/delivery/auction/request?profile=55');
     
-    $userId = $userResolver->getUserId($_COOKIE);
-    
-    header("X-CriteoBidder-UserId: $userId");
-    
-    if (!$decoder->tryDecode(file_get_contents("php://input"), $userId, $criteoRequest, $errorMessage)) {
-        ReturnNoBid($errorMessage);
-    }
-    
-    $bidRequest = json_encode(array('bidrequest' => $criteoRequest));
-
-    header("X-CriteoBidder-Request: $bidRequest");
-    
-    $options = array(
-      'http' => array(
-        'method'  => 'POST',
-        'content' => $bidRequest,
-        'header'=>  "Content-Type: application/json\r\n" .
-                    "Accept: application/json\r\n"
-        )
+    $bidder = new WrapperBidder(
+        $userResolver,
+        $decoder,
+        $innerBidder
     );
-
-    $context  = stream_context_create($options);
-    $rawResponse = file_get_contents($endPoint, false, $context);
     
-    header("X-CriteoBidder-Response: $rawResponse");
-    
-    if (!$decoder->tryEncode($rawResponse, $response, $errorMessage)) {
-        ReturnNoBid($errorMessage);
-    }
-    
+    $request = json_decode(file_get_contents("php://input"), true);
+    $response = $bidder->GetResponse($request);
     echo json_encode($response, JSON_PRETTY_PRINT);
 ?>

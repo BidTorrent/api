@@ -11,17 +11,17 @@ class DecoderHelper {
     function Set(&$obj, $keys, $value) {
         if ($value == null)
             return;
-        $current &= $obj;
-        $lastKey = array_pop($keys);
-        foreach($keys as $key) {
-            if (!isset($current[$key]))
-                $current[$key] = array();
-            $current &= $current[$key];
+        if (count($keys) == 1)
+            $obj[$keys[0]] = $value;
+        elseif (count($keys) > 1) {
+            $key = array_shift($keys);
+            if (!isset($obj[$key]))
+                $obj[$key] = array();
+            $this->Set($obj[$key], $keys, $value);
         }
-        $current[$lastKey] = $value;
     }
 
-    private function Sign($price, $requestId, $publisherId, $bidfloor) {
+    function Sign($price, $requestId, $publisherId, $bidfloor) {
         $key = file_get_contents($this->privateKeyFile);
         $data = number_format($price, 6).
                 $requestId.

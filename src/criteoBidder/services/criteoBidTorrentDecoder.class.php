@@ -9,24 +9,22 @@ class CriteoBidTorrentDecoder
         $this->helper = $helper;
     }
     
-    function tryDecode($stream, $userId, &$request, &$errorMessage) {
-        $request = json_decode($stream, true);
-
+    function tryDecode($request, $userId, &$decodedRequest, &$errorMessage) {
         if ($request == null)
         {
             $errorMessage = 'Not able to read the json';
             return false;
         }
         
-        $this->helper->Set($request, array('User', 'CriteoUser', 'Id'), $userId);
+        $this->helper->Set($request, array('user', 'buyeruid'), $userId);
         $this->bidfloor = $this->helper->Get($request, array('imp', 0, 'bidfloor'));
+        
+        $decodedRequest = $request;
         
         return true;
     }
 
-    function tryEncode($rawResponse, &$response, &$errorMessage) {
-        $response = json_decode($rawResponse, true);
-
+    function tryEncode($response, &$encodedResponse, &$errorMessage) {
         if ($response == null) {
             $errorMessage = "No response from CRITEO";
             return false;
@@ -47,6 +45,8 @@ class CriteoBidTorrentDecoder
             $btId, 
             $this->bidfloor
             ));
+        
+        $encodedResponse = $response;
         
         return true;
     }

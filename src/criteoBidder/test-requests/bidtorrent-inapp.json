@@ -1,7 +1,7 @@
 {
   "user": {
     "id": "MyID",
-    "buyerid": "MyID"
+    "buyeruid": "MyID"
   },
   "app": { 
     "domain": "www.bbc.com",
@@ -35,7 +35,7 @@
         "pos": 1,
         "w": 300
         },
-      "bidfloor": 1.75,
+      "bidfloor": 0.01,
       "id": "1",
       "instl": 1,
       "secure": false

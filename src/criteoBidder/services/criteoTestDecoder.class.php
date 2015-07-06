@@ -13,8 +13,8 @@ class CriteoTestDecoder
     }
 
     function tryDecode($stream, $userId, &$request, &$errorMessage) {
-        $content = json_decode(file_get_contents("php://input"), true);
-
+        $content = $stream;
+        
         if ($content == null)
         {
             $errorMessage = 'Not able to read the json';
@@ -54,8 +54,8 @@ class CriteoTestDecoder
         $criteoRequest['Currency']                          = $content['cur'];
         $criteoRequest['ext']['btid']                       = $this->helper->Get($content, array('ext', 'btid'));
 
-        $request = $criteoRequest;
-
+        $request = array('bidrequest' => $criteoRequest);
+    
         $this->currency = $content['cur'];
         $this->bidtorrentId = $content['ext']['btid'];
         $this->bidfloor = $content['imp'][0]['bidfloor'];
@@ -64,7 +64,7 @@ class CriteoTestDecoder
 
     function tryEncode($rawResponse, &$response, &$errorMessage) {
 
-        $criteoResponse = json_decode($rawResponse, true);
+        $criteoResponse = $rawResponse;
 
         if ($criteoResponse == null) {
             $errorMessage = "No response from CRITEO";
