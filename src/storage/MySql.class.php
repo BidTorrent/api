@@ -11,7 +11,7 @@ class MySql {
 				"mysql:dbname=$db;host=$host",
 				$user,
 				$pass,
-				array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING)
+				array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
 			);
 		}
 		catch (PDOException $e) {
