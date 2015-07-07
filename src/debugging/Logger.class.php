@@ -2,6 +2,12 @@
 
 class Logger
 {
+	var $env;
+
+	function __construct($env) {
+		$this->env = $env;
+	}
+
 	function info($data) {
 		$this->log("info", $data);
 	}
@@ -16,7 +22,7 @@ class Logger
 
 	function fatal($data) {
 		$this->log("fatal", $data);
-		die();
+		throw new Exception();
 	}
 
 	function log($severity, $data) {

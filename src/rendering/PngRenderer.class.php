@@ -13,6 +13,7 @@ class PngRenderer {
 		header('Pragma: no-cache');
 		header('Expires: 0');
 		echo base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=');
+		$this->log->info("render done");
 	}
 }
 

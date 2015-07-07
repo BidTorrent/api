@@ -11,36 +11,37 @@ class MySql {
 				"mysql:dbname=$db;host=$host",
 				$user,
 				$pass,
-				array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
+				array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING)
 			);
 		}
 		catch (PDOException $e) {
 			$this->log->error("Could not connect to mysql");
-			$this->log->fatal($e);
+			$this->log->warning($e);
 		}
 	}
 
 	function execute($sql, $params = null) {
+		$result = array();
+		
+		// handle with/without params
 		$this->handleArrayParams($sql, $params);
 		if ($params == null || (is_array($params) && count($params) == 0)) {
-			$result = array();
 			$queryResult = $this->connection->query($sql);
-			if ($queryResult === false) {
-				$this->log->fatal($this->connection->errorInfo());
-			}
-			foreach($queryResult as $row) {
-				$result[] = $row;
-			}
-			return $result;
 		} else {
 			$statement = $this->connection->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));			
 			$queryResult = $statement->execute($params);
-			if ($queryResult === false) {
-				$this->log->fatal($this->connection->errorInfo());
-			}
-
-			return $statement->fetchAll();
 		}
+
+		// error handling
+		if ($queryResult === false) {
+			$this->log->fatal($this->connection->errorInfo());
+		}
+
+		// buffer the output
+		foreach($queryResult as $row) {
+			$result[] = $row;
+		}
+		return $result;
 	}
 
 	function close() {
