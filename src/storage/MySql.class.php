@@ -5,12 +5,19 @@ class MySql {
 	private $log;
 
 	function __construct($host, $user, $pass, $db, $log) {
-		$this->connection = new PDO (
-			"mysql:dbname=$db;host=$host",
-			$user,
-			$pass
-		);
-		$this->log = $log;
+		try {			
+			$this->log = $log;
+			$this->connection = new PDO (
+				"mysql:dbname=$db;host=$host",
+				$user,
+				$pass,
+				array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING)
+			);
+		}
+		catch (PDOException $e) {
+			$this->log->error("Could not connect to mysql");
+			$this->log->fatal($e);
+		}
 	}
 
 	function execute($sql, $params = null) {
