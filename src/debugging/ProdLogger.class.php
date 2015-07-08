@@ -14,13 +14,15 @@ class ProdLogger extends Logger
 	}
 
 	function log($severity, $data) {
-		if ($this->env->isDebug()) {
-			parent::log($severity, $data);
-		}
-
 		ob_start();
 		var_dump($data);		
-		error_reporting("[$severity] " . ob_get_clean());
+		$data = ob_get_clean();
+		
+		if ($this->env->isDebug()) {
+			header($severity, $data);
+		} else {
+			error_reporting("[$severity] $data");
+		}
 	}
 }
 
