@@ -21,7 +21,8 @@ class ProdLogger extends Logger
 		$data = ob_get_clean();
 
 		if ($this->env->isDebug()) {
-			header("X-$severity-" . ++$this->counter . ": " . str_replace(array("\r\n", "\n", "\r"), ". ", $data));
+			$header = "X-$severity-" . ++$this->counter . ": " . str_replace(array("\r\n", "\n", "\r"), ". ", $data);
+			header(substr($header, 0, 250));
 		}
 		
 		error_log("[$severity] $data");

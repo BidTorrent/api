@@ -21,8 +21,7 @@ class Logger
 	}
 
 	function fatal($data) {
-		$this->log("fatal", $data);
-		throw new Exception();
+		throw new Exception($data);
 	}
 
 	function log($severity, $data) {
