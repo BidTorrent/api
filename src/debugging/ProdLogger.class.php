@@ -2,6 +2,8 @@
 
 class ProdLogger extends Logger
 {
+	private $counter;
+
 	function __construct($env) {
 		parent::__construct($env);
 
@@ -15,14 +17,14 @@ class ProdLogger extends Logger
 
 	function log($severity, $data) {
 		ob_start();
-		var_dump($data);		
+		parent::log($severity, $data);
 		$data = ob_get_clean();
 		
 		if ($this->env->isDebug()) {
-			header($severity, $data);
-		} else {
-			error_reporting("[$severity] $data");
+			header("X-$severity-" . ++$this->counter . ": " . str_replace(array("\r\n", "\n", "\r"), ". ", $data));
 		}
+		
+		error_log("[$severity] $data");
 	}
 }
 
