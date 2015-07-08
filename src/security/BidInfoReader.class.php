@@ -24,7 +24,11 @@ class BidInfoReader {
 			number_format($floor, 6, ".", "");
 
 		if (!$this->rsa->checkSignature($dataToValidate, $bidderSignature, $pubKey)) {
-			$this->log->fatal("Bad signature " . base64_encode($bidderSignature));
+			$this->log->fatal(
+				"Bad signature [" . base64_encode($bidderSignature) . "\n" .
+				"The concatenated parameters were [$dataToValidate]\n" .
+				"Price: {$result->price}, Auction: {$auction}, Publisher: {$publisher}, Floor:{$floor}\n"
+			);
 		}
 
 		return $result;
