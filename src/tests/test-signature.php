@@ -60,7 +60,11 @@ function initParam(&$params, $name, $default) {
 			</div>
 			<div class="col-sm-8">
 				<div class="form-group">
-					<span>Signature (base64 encoded)</span>
+					<label>Concatenated data</label>
+					<input name="concat" type="text" class="form-control" value="<?php echo $data ?>" />
+				</div>				
+				<div class="form-group">
+					<label>Signature (base64 encoded)</label>
 					<textarea class="form-control"  name="result" id="" cols="30" rows="10"><?php echo base64_encode($result) ?></textarea>
 				</div>				
 			</div>
