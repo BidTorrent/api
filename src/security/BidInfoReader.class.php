@@ -24,7 +24,7 @@ class BidInfoReader {
 			number_format($floor, 6, ".", "");
 
 		if (!$this->rsa->checkSignature($dataToValidate, $bidderSignature, $pubKey)) {
-			$this->log->fatal("Bad signature $bidderSignature");
+			$this->log->fatal("Bad signature " . base64_encode($bidderSignature));
 		}
 
 		return $result;

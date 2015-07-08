@@ -26,8 +26,10 @@ class Logger
 	}
 
 	function log($severity, $data) {
-		echo "[$severity] ";
-		var_dump($data);
+		if (is_object($data) || is_array($data))
+			var_dump($data);
+		else
+			echo $data;
 		debug_backtrace();
 	}
 }

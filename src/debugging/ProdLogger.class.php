@@ -19,7 +19,7 @@ class ProdLogger extends Logger
 		ob_start();
 		parent::log($severity, $data);
 		$data = ob_get_clean();
-		
+
 		if ($this->env->isDebug()) {
 			header("X-$severity-" . ++$this->counter . ": " . str_replace(array("\r\n", "\n", "\r"), ". ", $data));
 		}

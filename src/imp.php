@@ -2,6 +2,7 @@
 
 include_once("debugging/Environment.class.php");
 include_once("debugging/Logger.class.php");
+include_once("debugging/DebugLogger.class.php");
 include_once("debugging/ProdLogger.class.php");
 include_once("security/Rsa.class.php");
 include_once("security/BidInfoReader.class.php");
