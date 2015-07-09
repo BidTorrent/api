@@ -18,7 +18,6 @@ class DebugLogger extends Logger
 		$data = str_replace(array("\r\n", "\n", "\r"), "<br />", $data);
 
 		echo "<b>[$severity]</b> $data";
-		error_log("[$severity] $data");
 	}
 }
 

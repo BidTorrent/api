@@ -22,10 +22,12 @@ class ProdLogger extends Logger
 
 		if ($this->env->isDebug()) {
 			$header = "X-$severity-" . ++$this->counter . ": " . str_replace(array("\r\n", "\n", "\r"), ". ", $data);
-			header(substr($header, 0, 250));
+			header(substr($header, 0, 127));
 		}
 		
-		error_log("[$severity] $data");
+		if ($severity == "error" || $severity == "fatal") {
+			error_log("[$severity] $data");
+		}
 	}
 }
 
