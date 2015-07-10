@@ -10,8 +10,10 @@ include_once("storage/MySql.class.php");
 include_once("storage/ImpressionLogDao.class.php");
 include_once("storage/BidderDao.class.php");
 include_once("tracking/ImpressionTracking.class.php");
+include_once("tracking/StatsController.class.php");
 include_once("rendering/PngRenderer.class.php");
 include_once("rendering/DebugRenderer.class.php");
+include_once("rendering/JsonRenderer.class.php");
 
 $env = new Environment($_GET);
 if (!file_exists('config/config.php')) die('config/config.php is not found, copy the appropriate "config/config.XXX.php" files to "config/config.php"');

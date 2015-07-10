@@ -7,7 +7,7 @@ class PngRenderer {
 		$this->log = $log;
 	}
 
-	function render() {
+	function render($data) {
 		header('Content-Type: image/png');
 		header('Cache-Control: no-cache, no-store, must-revalidate');
 		header('Pragma: no-cache');

@@ -4,11 +4,12 @@ include('all.inc.php');
 
 $db = $config["db"];
 $impDao = new ImpressionLogDao($db);
+$view = new JsonRenderer();
+$controller = new StatsController($impDao, $view);
 
-var_dump($impDao->getPublisherDailyStats(
-	3, 
-	1435708800,
-	1436486400
-));
+$controller->showDailyStat(
+	$_GET['publisher'],
+	$_GET['from'],
+	$_GET['to']);
 
 ?>

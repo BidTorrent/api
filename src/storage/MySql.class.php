@@ -26,14 +26,16 @@ class MySql {
 		// handle with/without params
 		$this->handleArrayParams($sql, $params);
 		if ($params == null || (is_array($params) && count($params) == 0)) {
-			$queryResult = $this->connection->query($sql);
+			$success = $this->connection->query($sql);
+			$queryResult = $success;
 		} else {
-			$statement = $this->connection->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));			
-			$queryResult = $statement->execute($params);
+			$statement = $this->connection->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+			$success = $statement->execute($params);
+			$queryResult = $statement;
 		}
 
 		// error handling
-		if ($queryResult === false) {
+		if ($success === false) {
 			$this->log->fatal($this->connection->errorInfo());
 		}
 
