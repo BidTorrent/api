@@ -6,13 +6,6 @@ class ProdLogger extends Logger
 
 	function __construct($env) {
 		parent::__construct($env);
-
-	 	ini_set("error_reporting", "E_ALL");
-		if ($this->env->isDebug()) {
-		 	ini_set("display_errors", "On");
-	 	} else {
-		 	ini_set("display_errors", "Off");	 		
-	 	}
 	}
 
 	function log($severity, $data) {
@@ -25,7 +18,7 @@ class ProdLogger extends Logger
 			header(substr($header, 0, 127));
 		}
 		
-		if ($severity == "error" || $severity == "fatal") {
+		if ($severity != "debug") {
 			error_log("[$severity] $data");
 		}
 	}

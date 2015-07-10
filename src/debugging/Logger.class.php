@@ -8,6 +8,10 @@ class Logger
 		$this->env = $env;
 	}
 
+	function debug($data) {
+		$this->log("info", $data);
+	}
+
 	function info($data) {
 		$this->log("info", $data);
 	}
@@ -21,7 +25,7 @@ class Logger
 	}
 
 	function fatal($data) {
-		throw new Exception($data);
+		throw new Exception((string)$data);
 	}
 
 	function log($severity, $data) {
@@ -61,6 +65,6 @@ function bd_error_handler($errno , $errstr, $errfile, $errline, $errcontext)
 	}
 }
 
-set_error_handler("bd_error_handler");
+//set_error_handler("bd_error_handler");
 
 ?>
