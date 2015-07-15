@@ -27,7 +27,7 @@ class BidInfoReader {
 			$this->log->fatal(
 				"Bad signature [" . base64_encode($bidderSignature) . "\n" .
 				"The concatenated parameters were [$dataToValidate]\n" .
-				"The bidder public key was [$bidderSignature]\n" .
+				"The bidder public key was [$pubKey]\n" .
 				"Price: {$result->price}, Auction: {$auction}, Publisher: {$publisher}, Floor:{$floor}\n"
 			);
 		}
