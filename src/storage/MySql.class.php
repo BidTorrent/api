@@ -27,11 +27,11 @@ class MySql {
 		$this->handleArrayParams($sql, $params);
 		if ($params == null || (is_array($params) && count($params) == 0)) {
 			$success = $this->connection->query($sql);
-			$queryResult = $success;
+			$result = $success;
 		} else {
 			$statement = $this->connection->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 			$success = $statement->execute($params);
-			$queryResult = $statement;
+			$result = $statement;
 		}
 
 		// error handling
@@ -39,10 +39,6 @@ class MySql {
 			$this->log->fatal($this->connection->errorInfo());
 		}
 
-		// buffer the output
-		foreach($queryResult as $row) {
-			$result[] = $row;
-		}
 		return $result;
 	}
 
