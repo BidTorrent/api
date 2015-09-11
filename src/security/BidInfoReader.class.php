@@ -11,24 +11,20 @@ class BidInfoReader {
 		$this->log = $log;
 	}
 
-	function read($data, $auction, $bidder, $publisher, $floor, $pubKey) {
-		list($price, $bidderSignature) = explode("-", $data);
+	function read($data, $auctionId, $impId, $bidder, $publisher, $floor, $pubKey) {
+		list($price, $signature) = explode('-', $data);
+
 		$floor = floatval($floor);
-
 		$result = new BidInfo($bidder, floatval($price));
-		$bidderSignature = base64_decode($bidderSignature);
-		$dataToValidate =
-			number_format($result->price, 6, ".", "") .
-			$auction .
-			$publisher .
-			number_format($floor, 6, ".", "");
+		$dataToValidate = number_format($result->price, 6, '.', '') . '|' . $auctionId . '|' . $impId . '|' . $publisher . '|' . number_format($floor, 6, '.', '');
+		$signature = base64_decode($signature);
 
-		if (!$this->rsa->checkSignature($dataToValidate, $bidderSignature, $pubKey)) {
+		if (!$this->rsa->checkSignature($dataToValidate, $signature, $pubKey)) {
 			$this->log->fatal(
-				"Bad signature [" . base64_encode($bidderSignature) . "\n" .
+				"Bad signature [" . base64_encode($signature) . "\n" .
 				"The concatenated parameters were [$dataToValidate]\n" .
 				"The bidder public key was [$pubKey]\n" .
-				"Price: {$result->price}, Auction: {$auction}, Publisher: {$publisher}, Floor:{$floor}\n"
+				"Price: {$result->price}, Auction: {$auctionId}, Impression: {$impId}, Publisher: {$publisher}, Floor:{$floor}\n"
 			);
 		}
 

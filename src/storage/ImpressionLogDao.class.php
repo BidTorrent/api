@@ -14,6 +14,7 @@ class ImpressionLogDao {
 				publisherId,
 				bidderId,
 				auctionId,
+				impId,
 				price
 			)
 			VALUES 
@@ -21,14 +22,16 @@ class ImpressionLogDao {
 				:date,
 				:publisher,
 				:bidder,
-				:auction,
+				:auctionId,
+				:impId,
 				:price
 			)',
 			array(				
 				'date' => $log->date,
 				'publisher' => $log->publisher,
 				'bidder' => $log->bidder,
-				'auction' => $log->auction,
+				'auctionId' => $log->auctionId,
+				'impId' => $log->impId,
 				'price' => $log->price
 			)
 		);
@@ -72,7 +75,8 @@ class ImpressionLogDao {
 // Represents an impression log
 class ImpressionLog {
 	public $date;
-	public $auction;
+	public $auctionId;
+	public $impId;
 	public $publisher;
 	public $bidder;
 	public $price;
