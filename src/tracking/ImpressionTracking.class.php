@@ -15,41 +15,76 @@ class ImpressionTracking {
 
 	function track($params) {
 		if (!isset($params['a']))
+		{
 			$this->log->fatal("auction param is missing");
 
+			return;
+		}
+
 		if (!isset($params['d']) || !is_array($params['d']))
+		{
 			$this->log->fatal("data param is missing");
 
+			return;
+		}
+
 		if (!isset($params['f']) || !is_array($params['f']))
+		{
 			$this->log->fatal("floor param is missing");
 
+			return;
+		}
+
 		if (!isset($params['i']) || !is_array($params['i']))
+		{
 			$this->log->fatal("impression param is missing");
 
-		if (!isset($params['p']) || !is_array($params['p']))
+			return;
+		}
+
+		if (!isset($params['p']))
+		{
 			$this->log->fatal("publisher param is missing");
+
+			return;
+		}
 
 		$auctionId = $params['a'];
 		$biddersData = $params['d'];
 		$floors = $params['f'];
 		$impIds = $params['i'];
-		$publishers = $params["p"];
+		$publisher = $params["p"];
 
 		foreach ($impIds as $i => $impId)
 		{
-			if (!isset ($biddersData[$i]) || !isset ($floors[$i]) || !isset ($publishers[$i]))
+			if (!isset ($biddersData[$i]) || !isset ($floors[$i]))
 				continue;
 
 			$bidderData = $biddersData[$i];
 			$floor = $floors[$i];
-			$publisher = $publishers[$i];
 
 			// parse the bids and check the signature
 			$rsaPubKeys = $this->bidderDao->getKeys(array_keys($bidderData));
 			$bids = array();
 
 			foreach ($bidderData as $bidder => $data)
-				$bids[$bidder] = $this->bidReader->read($data, $auctionId, $impId, $bidder, $publisher, $floor, $rsaPubKeys[$bidder]);
+			{
+				// Get bid information if bidder signature can be verified
+				if (isset ($rsaPubKeys[$bidder]))
+					$bid = $this->bidReader->read($data, $auctionId, $impId, $bidder, $publisher, $floor, $rsaPubKeys[$bidder]);
+				else
+				{
+					$this->log->warning('bidder "' . $bidder . '" doesn\'t exist');
+
+					$bid = null;
+				}
+
+				// Bidder was unknown or signature verification failed, don't log anything
+				if ($bid === null)
+					continue 2;
+
+				$bids[$bidder] = $bid;
+			}
 
 			$bids['publisher'] = new BidInfo('publisher', $floor);
 

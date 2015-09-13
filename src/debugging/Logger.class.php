@@ -9,23 +9,23 @@ class Logger
 	}
 
 	function debug($data) {
-		$this->log("info", $data);
+		$this->log('info', $data);
 	}
 
 	function info($data) {
-		$this->log("info", $data);
+		$this->log('info', $data);
 	}
 
 	function warning($data) {
-		$this->log("warning", $data);
+		$this->log('warning', $data);
 	}
 
 	function error($data) {
-		$this->log("error", $data);		
+		$this->log('error', $data);
 	}
 
 	function fatal($data) {
-		throw new Exception((string)$data);
+		$this->log('fatal', $data);
 	}
 
 	function log($severity, $data) {
@@ -43,7 +43,7 @@ function bd_error_handler($errno , $errstr, $errfile, $errline, $errcontext)
 	global $config;
 	$log = $config['log'];
 
-	$severity = "";
+	$severity = '';
 	switch($errno) {
 		case E_ERROR:
 		case E_RECOVERABLE_ERROR:

@@ -37,6 +37,8 @@ class MySql {
 		// error handling
 		if ($success === false) {
 			$this->log->fatal($this->connection->errorInfo());
+
+			die;
 		}
 
 		return $result;

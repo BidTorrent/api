@@ -26,6 +26,8 @@ class BidInfoReader {
 				"The bidder public key was [$pubKey]\n" .
 				"Price: {$result->price}, Auction: {$auctionId}, Impression: {$impId}, Publisher: {$publisher}, Floor:{$floor}\n"
 			);
+
+			return null;
 		}
 
 		return $result;
