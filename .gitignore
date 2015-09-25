@@ -1,6 +1,15 @@
 # IDE files
 .idea
+.foundation
+*.tgz
+*.phar
+*.lock
+*tmp
+.idea
 
 # Generated files
-/src/debug.log
+/build/
+/src/config/BidTorrent.json
+/src/config/BidTorrent.p12
 /src/config/config.php
+/src/debug.log
