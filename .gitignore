@@ -1,0 +1,6 @@
+# IDE files
+.idea
+
+# Generated files
+/src/debug.log
+/src/config/config.php
