@@ -36,40 +36,6 @@ class ImpressionLogDao {
 			)
 		);
 	}
-
-	function getPublisherDailyStats($publisher, $from, $to) {
-		$result = array();
-		$rows = $this->db->execute('
-			SELECT
-				DATE(FROM_UNIXTIME(`date`)) AS `date`,
-				count(id) AS impressions,
-				SUM(price) AS revenue
-			FROM
-				log_impressions
-			WHERE 
-				`date` >= :from
-				AND `date` < :to
-				AND publisherId = :publisher
-			GROUP BY
-				DATE(FROM_UNIXTIME(`date`))
-			',
-			array(				
-				'publisher' => $publisher,
-				'from' => $from,
-				'to' => $to
-			)
-		);
-
-		foreach ($rows as $row) {
-			$object = new PublisherDailyStat();
-			$object->date = $row['date'];
-			$object->impressions = (int) $row['impressions'];
-			$object->revenue = (float) $row['revenue'];
-			$result[] = $object;
-		}
-
-		return $result;
-	}	
 }
 
 // Represents an impression log
@@ -80,13 +46,6 @@ class ImpressionLog {
 	public $publisher;
 	public $bidder;
 	public $price;
-}
-
-// Represents a daily stat for a publisher
-class PublisherDailyStat {
-	public $date;
-	public $impressions;
-	public $revenue; 
 }
 
 ?>
