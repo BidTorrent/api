@@ -12,7 +12,7 @@ class Publishers
 
     static $PUBLISHER_FIELDS = array('name' => true, 'type' => true, 'country' => false, 'timeout' => false, 'secured' => false, 'hostConfig' => false, 'biddersUrl' => false, 'clientUrl' => false, 'impUrl' => false);
     static $FILTER_FIELDS = array('publisher' => true, 'type' => true, 'mode' => false, 'value' => false);
-    static $SLOT_FIELDS = array('publisher' => true, 'html_id' => true, 'width' => false, 'height' => false, 'false' => false, 'passback' => false);
+    static $SLOT_FIELDS = array('publisher' => true, 'html_id' => true, 'width' => false, 'height' => false, 'false' => false, 'passback' => false, 'floor' => false);
 
     function __construct($db, $users)
     {
