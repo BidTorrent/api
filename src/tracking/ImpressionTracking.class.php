@@ -92,19 +92,23 @@ class ImpressionTracking {
 			$first = $bids['publisher'];
 			$second = $bids['publisher'];
 
-			foreach ($bids as $bid) {
-				if ($bid->price > $second->price) {
-					if ($bid->price > $first->price) {
+			foreach ($bids as $bid)
+			{
+				if ($bid->price > $second->price)
+				{
+					if ($bid->price > $first->price)
+					{
 						$second = $first;
 						$first = $bid;
-					} else {
-						$second = $bid;
 					}
+					else
+						$second = $bid;
 				}
 			}
 
 			// log the impression with second's price + 0.01
-			if ($first->bidder != 'publisher') {
+			if ($first->bidder != 'publisher')
+			{
 				$log = new ImpressionLog();
 				$log->date = time();
 				$log->auctionId = $auctionId;

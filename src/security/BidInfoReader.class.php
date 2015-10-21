@@ -2,43 +2,86 @@
 
 // - Parses raw data from the request
 // - Verify the bidder signature
-class BidInfoReader {
+class BidInfoReader
+{
 	private $rsa;
 	private $log;
 
-	function __construct($rsa, $log) {
+	function __construct($rsa, $log)
+	{
 		$this->rsa = $rsa;
 		$this->log = $log;
 	}
 
-	function read($data, $auctionId, $impId, $bidder, $publisher, $floor, $pubKey) {
-		list($price, $signature) = explode('-', $data);
-
+	function read($data, $auctionId, $impId, $bidder, $publisher, $floor, $pubKey)
+	{
 		$floor = floatval($floor);
-		$result = new BidInfo($bidder, floatval($price));
-		$dataToValidate = number_format($result->price, 6, '.', '') . '|' . $auctionId . '|' . $impId . '|' . $publisher . '|' . number_format($floor, 6, '.', '');
-		$signature = base64_decode($signature);
+		$now = time();
+		$remote = isset ($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
 
-		if (!$this->rsa->checkSignature($dataToValidate, $signature, $pubKey)) {
-			$this->log->fatal(
-				"Bad signature [" . base64_encode($signature) . "\n" .
-				"The concatenated parameters were [$dataToValidate]\n" .
-				"The bidder public key was [$pubKey]\n" .
-				"Price: {$result->price}, Auction: {$auctionId}, Impression: {$impId}, Publisher: {$publisher}, Floor:{$floor}\n"
-			);
+		// Decode fields from signed data buffer
+		$fields = explode('-', $data);
+
+		switch (count ($fields))
+		{
+			case 2:
+				list ($price, $signature) = $fields;
+
+				$message = number_format($price, 6, '.', '') . '|' . $auctionId . '|' . $impId . '|' . $publisher . '|' . number_format($floor, 6, '.', '');
+
+				$address = $remote;
+				$timestamp = $now;
+
+				break;
+
+			case 5:
+				list ($version, $signature, $price, $timestamp, $address) = $fields;
+
+				$message = implode('|', array($version, number_format($price, 6, '.', ''), $timestamp, $address, $auctionId, $impId, $publisher, number_format($floor, 6, '.', '')));
+
+				break;
+
+			default:
+				$this->log->fatal('Unrecognized signed data: ' . $data);
+
+				return null;
+		}
+
+		// Reject invalid IP address
+		if ($address !== $remote)
+		{
+			$this->log->fatal('Invalid IP address on message: ' . $message . ', remote: ' . $remote);
 
 			return null;
 		}
 
-		return $result;
+		// Reject invalid timestamp
+		if (abs($now - $timestamp) > 300)
+		{
+			$this->log->fatal('Outdated message: ' . $message . ', timestamp: ' . $timestamp);
+
+			return null;
+		}
+
+		// Reject invalid signature
+		if (!$this->rsa->checkSignature($message, base64_decode($signature), $pubKey))
+		{
+			$this->log->fatal('Corrupted signed message: ' . $message . ', signature: ' . $signature);
+
+			return null;
+		}
+
+		return new BidInfo($bidder, floatval($price));
 	}
 }
 
-class BidInfo {
+class BidInfo
+{
 	public $bidder;
 	public $price;
 
-	function __construct($bidder, $price) {
+	function __construct($bidder, $price)
+	{
 		$this->bidder = $bidder;
 		$this->price = $price;
 	}
